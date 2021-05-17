@@ -66,8 +66,8 @@ export const buyToken = async (tokenAddress: string, amountIn: BigNumber): Promi
 
 const buyOrder = async () => {
   if (!bought) {
-    await buyToken(TOKEN_ADDRESS, amountIn);
     bought = true;
+    await buyToken(TOKEN_ADDRESS, amountIn);
     console.log({ bought });
   }
   return;

@@ -3,7 +3,7 @@ const fs = require("fs");
 module.exports = {
   main: {
     mnemonic_filename: ".secret",
-    bsc_token_address: "0xce406CbB4c26Bf62c1847Bd1a462012aE8c713D2",
+    bsc_token_address: "0x79822455d2DDBeE8616Ef9890554b413Bd39c79F",
     walletIndex: "0",
     buy_amount_bnb: "0.001",
     slippagePercentage: "49", //max 49

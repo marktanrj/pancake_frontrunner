@@ -12,6 +12,8 @@
     "gas": "ts-node ./src/utils/getCurrentGasPrice.ts",
     "i": "ts-node ./src/utils/setAmountInWbnb.ts",
     "in": "ts-node ./src/utils/setAmountInWbnb.ts",
+    "o": "ts-node ./src/utils/withdrawAmountWbnb.ts",
+    "out": "ts-node ./src/utils/withdrawAmountWbnb.ts",
     "a": "ts-node ./src/utils/setAmountApproveWbnb.ts",
     "approve": "ts-node ./src/utils/setAmountApproveWbnb.ts",
     "s": "ts-node ./src/utils/printAmountInAndApproved.ts",

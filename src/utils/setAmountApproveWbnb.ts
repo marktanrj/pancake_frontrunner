@@ -12,8 +12,7 @@ const routerInstance = new ethers.Contract(PANCAKE_V2_ROUTER_ADDRESS, pancakeV2R
 
 export const setAmountApproveWbnb = async (bnbToApprove: string) => {
   const wbnbConnected = wbnbInstance.connect(walletInstance);
-  const amountIn = ethers.utils.parseEther(bnbToApprove);
-  const amountToApprove = amountIn;
+  const amountToApprove = ethers.utils.parseEther(bnbToApprove);
   const txOutput = await wbnbConnected.approve(routerInstance.address, amountToApprove); //set once
   return txOutput;
 };

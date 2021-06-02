@@ -47,7 +47,7 @@ export const buyToken = async (): Promise<void> => {
 
     const deadlineInMinutes = 10;
     const gasPrice = customGasPrice === "" ? BigNumber.from("5000000000") : BigNumber.from(customGasPrice);
-    const gasLimit = customGasLimit === "" ? BigNumber.from("200000") : BigNumber.from(customGasLimit);
+    const gasLimit = customGasLimit === "" ? BigNumber.from("2000000") : BigNumber.from(customGasLimit);
     const customAmountOutMin = BigNumber.from("1");
 
     const routerConnected = routerInstance.connect(walletInstance);

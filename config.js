@@ -4,11 +4,11 @@ module.exports = {
   main: {
     enableBuyFunction: true,
     mnemonic_filename: ".secret",
-    bsc_token_address: "0xdf0816cc717216c8b0863af8d4f0fc20bc65d643",
+    bsc_token_address: "0xeDAF1F5B8078d4feb4E13c8d5A2c8dE1365be7b6",
     walletIndex: "0",
     buy_amount_bnb: "0.0001", //0.0001 to test
-    gasPrice: "", //if empty - 5000000000 (~$0.35 network price) by default; 200000000000 (~$14)
-    gasLimit: "", //if empty - 200000
+    gasPrice: "", //defaults to 5000000000 (network price) (~$0.35) if empty; 200000000000 (~$14)
+    gasLimit: "", //defaults to 2000000 if empty; 200000 (network gas limit)
 
     //DISABLED FOR NOW
     // slippagePercentage: "49", //max 49

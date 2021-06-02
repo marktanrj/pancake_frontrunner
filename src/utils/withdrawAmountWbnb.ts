@@ -7,10 +7,10 @@ const wbnbAbi = config.mainnet_abis.WBNB;
 
 const wbnbInstance = new ethers.Contract(WBNB_ADDRESS, wbnbAbi, provider);
 
-export const setAmountInWbnb = async (bnbToInsert: string) => {
+export const withdrawAmountWbnb = async (bnbToWithdraw: string) => {
   const wbnbConnected = wbnbInstance.connect(walletInstance);
-  const amountIn = ethers.utils.parseEther(bnbToInsert);
-  const txOutput = await wbnbConnected.deposit({ value: amountIn });
+  const amountOut = ethers.utils.parseEther(bnbToWithdraw);
+  const txOutput = await wbnbConnected.withdraw(amountOut);
   return txOutput;
 };
 
@@ -22,8 +22,8 @@ const main = async () => {
   if (args.length > 1) {
     return console.log("Incorrect usage, too many arguments");
   }
-  const bnbToInsert = args[0];
-  const txOutput = await setAmountInWbnb(bnbToInsert);
+  const bnbToWithdraw = args[0];
+  const txOutput = await withdrawAmountWbnb(bnbToWithdraw);
   console.log(txOutput);
 };
 

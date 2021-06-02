@@ -15,7 +15,7 @@ npm install    //if using npm
 1. Type `yarn a <bnb amount>` to approve amount on WBNB contract
 1. Type `yarn s` to check both amounts, make sure they are higher than _buy_amount_bnb_
 1. (Optional) Adjust gasPrice and gasLimit in _config.js_
-1. Type `yarn snipe` to start listener, process is auto exit after transaction succeeds/fails
+1. Type `yarn snipe` to start listener, process will auto exit after transaction succeeds/fails
 
 ### Commands
 

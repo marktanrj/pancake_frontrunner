@@ -38,6 +38,9 @@ export const getReserves = async (pairAddress: string) => {
 
 const main = async () => {
   const args = process.argv.slice(2);
+  if (args.length < 1) {
+    return console.log("Incorrect usage, enter a token address");
+  }
   if (args.length > 1) {
     return console.log("Too many arguments");
   }

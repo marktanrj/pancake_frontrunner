@@ -2,13 +2,16 @@ const fs = require("fs");
 
 module.exports = {
   main: {
+    enableBuyFunction: true,
     mnemonic_filename: ".secret",
-    bsc_token_address: "0x79822455d2DDBeE8616Ef9890554b413Bd39c79F",
+    bsc_token_address: "0xdf0816cc717216c8b0863af8d4f0fc20bc65d643",
     walletIndex: "0",
-    buy_amount_bnb: "0.001",
-    slippagePercentage: "49", //max 49
-    // gasPrice: "", //empty for default
-    // gasLimit: "180000",
+    buy_amount_bnb: "0.0001", //0.0001 to test
+    gasPrice: "", //if empty - 5000000000 (~$0.35 network price) by default; 200000000000 (~$14)
+    gasLimit: "", //if empty - 200000
+
+    //DISABLED FOR NOW
+    // slippagePercentage: "49", //max 49
   },
   providers: {
     mainnet: "https://bsc-dataseed1.binance.org",

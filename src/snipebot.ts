@@ -6,6 +6,7 @@ import { provider, wallet as walletInstance } from "./Instances/Instances";
 import { getTokenData } from "./utils/getTokenData";
 import { getReserves } from "./utils/getReserves";
 import { getPairAddress } from "./utils/getPairAddress";
+import { printAmountInAndApproved } from "./utils/printAmountInAndApproved";
 
 const PANCAKE_V2_ROUTER_ADDRESS = config.mainnet_addresses.PANCAKE_V2_ROUTER;
 const PANCAKE_V2_FACTORY_ADDRESS = config.mainnet_addresses.PANCAKE_V2_FACTORY;
@@ -14,43 +15,51 @@ const TOKEN_ADDRESS = config.main.bsc_token_address;
 
 const pancakeV2RouterAbi = config.mainnet_abis.PANCAKE_V2_ROUTER;
 const pancakeV2FactoryAbi = config.mainnet_abis.PANCAKE_V2_FACTORY;
-const wbnbAbi = config.mainnet_abis.WBNB;
-const tokenAbi = config.mainnet_abis.BEP20;
+// const wbnbAbi = config.mainnet_abis.WBNB;
+// const tokenAbi = config.mainnet_abis.BEP20;
 const pairAbi = config.mainnet_abis.PAIR;
 
 const buy_bnb_amount = config.main.buy_amount_bnb;
-const slippage = config.main.slippagePercentage;
-const walletAddress = walletInstance.address;
+// const slippage = config.main.slippagePercentage;
+const customGasPrice = config.main.gasPrice;
+const customGasLimit = config.main.gasLimit;
+const enableBuyFunction = config.main.enableBuyFunction;
 
 const factory = new ethers.Contract(PANCAKE_V2_FACTORY_ADDRESS, pancakeV2FactoryAbi, provider);
 const routerInstance = new ethers.Contract(PANCAKE_V2_ROUTER_ADDRESS, pancakeV2RouterAbi, provider);
-const wbnbInstance = new ethers.Contract(WBNB_ADDRESS, wbnbAbi, provider);
+// const wbnbInstance = new ethers.Contract(WBNB_ADDRESS, wbnbAbi, provider);
 
 let bought = false;
 const amountIn = ethers.utils.parseEther(buy_bnb_amount);
+const walletAddress = walletInstance.address;
 
-export const buyToken = async (tokenAddress: string, amountIn: BigNumber): Promise<void> => {
+export const buyToken = async (): Promise<void> => {
   try {
-    const [amountsOut, gasPrice] = await Promise.all([
-      routerInstance.getAmountsOut(amountIn, [WBNB_ADDRESS, tokenAddress]),
-      provider.getGasPrice(),
-    ]);
-    const amountOutMin = amountsOut[1].mul(BigNumber.from(100 - parseInt(slippage))).div(BigNumber.from(100));
-    console.log({ amountsOut: amountsOut.toString() });
-    console.log({ amountOutMin: amountOutMin.toString() });
-    console.log({ gasPrice: gasPrice.toString() });
+    // const [amountsOut, gasPrice] = await Promise.all([
+    //   routerInstance.getAmountsOut(amountIn, [WBNB_ADDRESS, tokenAddress]),
+    //   provider.getGasPrice(),
+    // ]);
+    // const amountOutMin = amountsOut[1].mul(BigNumber.from(100 - parseInt(slippage))).div(BigNumber.from(100));
+    // console.log({ amountsOut: amountsOut.toString() });
+    // console.log({ amountOutMin: amountOutMin.toString() });
+    // console.log({ gasPrice: gasPrice.toString() });
+    console.log("BUYING NOW");
 
     const deadlineInMinutes = 10;
+    const gasPrice = customGasPrice === "" ? BigNumber.from("5000000000") : BigNumber.from(customGasPrice);
+    const gasLimit = customGasLimit === "" ? BigNumber.from("200000") : BigNumber.from(customGasLimit);
+    const customAmountOutMin = BigNumber.from("1");
+
     const routerConnected = routerInstance.connect(walletInstance);
     const tx = await routerConnected.swapExactTokensForTokens(
       amountIn,
-      amountOutMin,
-      [WBNB_ADDRESS, tokenAddress],
+      customAmountOutMin,
+      [WBNB_ADDRESS, TOKEN_ADDRESS],
       walletAddress,
       Math.floor(Date.now() / 1000) + 60 * deadlineInMinutes,
       {
         gasPrice: gasPrice,
-        gasLimit: 180000,
+        gasLimit: gasLimit,
       },
     );
     console.log("Transaction sent");
@@ -67,8 +76,11 @@ export const buyToken = async (tokenAddress: string, amountIn: BigNumber): Promi
 const buyOrder = async () => {
   if (!bought) {
     bought = true;
-    await buyToken(TOKEN_ADDRESS, amountIn);
-    console.log({ bought });
+    if (enableBuyFunction) {
+      await buyToken();
+      console.log({ bought });
+      process.exit();
+    }
   }
   return;
 };
@@ -129,17 +141,7 @@ const onFactoryPairCreated = async (token0Address, token1Address, pairAddress, u
 };
 
 export const main = async () => {
-  const wbnbConnected = wbnbInstance.connect(walletInstance);
-
-  // const amountInDeposit = amountIn;
-  // await wbnbConnected.deposit({ value: amountInDeposit });
-  const balanceBNB = await wbnbInstance.balanceOf(walletAddress);
-  console.log({ balanceOf: ethers.utils.formatEther(balanceBNB) });
-
-  // const amountInApprove = amountIn
-  // await wbnbConnected.approve(routerInstance.address, amountInApprove);  //set once
-  const allowanceBNB = await wbnbInstance.allowance(walletAddress, routerInstance.address);
-  console.log({ allowanceBNB: ethers.utils.formatEther(allowanceBNB) });
+  await printAmountInAndApproved();
 
   const pairAddress = await getPairAddress(TOKEN_ADDRESS);
   if (pairAddress === "No Pair") {

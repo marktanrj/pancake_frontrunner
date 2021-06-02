@@ -20,5 +20,5 @@ yarn i <bnb amount>      //insert bnb amount to WBNB contract
 yarn a <bnb amount>      //approve bnb amount to be spent by WBNB contract
 yarn s                   //get status of amount in and approved
 yarn buy                 //buy token immediately
-yarn dev                 //start sniper (to listen and buy token when launched)
+yarn snipe                 //start sniper (to listen and buy token when launched)
 ```
